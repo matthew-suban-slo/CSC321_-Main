@@ -183,6 +183,40 @@ def show_img(image: ndarray, file_name):
     plt.axis("off")
     plt.show()
 
+def display_encrypted_image(encrypted_filename: str, original_shape: tuple, display_label: str):
+    """Display an encrypted image file by reading it as raw bytes and reshaping"""
+    if not os.path.exists(encrypted_filename):
+        return
+    
+    with open(encrypted_filename, 'rb') as f:
+        encrypted_data = f.read()
+    
+    # Convert to numpy array and reshape to approximate image dimensions
+    encrypted_array = np.frombuffer(encrypted_data, dtype=np.uint8)
+    total_bytes = len(encrypted_array)
+    
+    if len(original_shape) == 3:
+        # RGB image
+        pixels = total_bytes // 3
+        aspect_ratio = original_shape[1] / original_shape[0]
+        height = int(np.sqrt(pixels / aspect_ratio))
+        width = int(height * aspect_ratio)
+        # Adjust to fit the data
+        if height * width * 3 > total_bytes:
+            width = total_bytes // (height * 3)
+        img_array = encrypted_array[:height*width*3].reshape((height, width, 3))
+    else:
+        # Grayscale image
+        pixels = total_bytes
+        aspect_ratio = original_shape[1] / original_shape[0]
+        height = int(np.sqrt(pixels / aspect_ratio))
+        width = int(height * aspect_ratio)
+        if height * width > total_bytes:
+            width = total_bytes // height
+        img_array = encrypted_array[:height*width].reshape((height, width))
+    
+    show_img(img_array, f"{display_label}: {encrypted_filename}")
+
 if __name__ == "__main__":
     # Encrypt the BMP files
     encrypt_bmp_files()
@@ -201,65 +235,10 @@ if __name__ == "__main__":
         original_shape = img_array.shape
         show_img(img_array, f"Original: {bmp_file}")
         
-        # Display ECB encrypted image (read as raw bytes)
-        ecb_filename = f"{bmp_file.split('.')[0]}_ecb_encrypted.bmp"
-        if os.path.exists(ecb_filename):
-            with open(ecb_filename, 'rb') as f:
-                ecb_data = f.read()
-            # Convert to numpy array and reshape to approximate image dimensions
-            ecb_array = np.frombuffer(ecb_data, dtype=np.uint8)
-            # Calculate dimensions based on file size, maintaining aspect ratio
-            total_bytes = len(ecb_array)
-            if len(original_shape) == 3:
-                # RGB image
-                pixels = total_bytes // 3
-                aspect_ratio = original_shape[1] / original_shape[0]
-                height = int(np.sqrt(pixels / aspect_ratio))
-                width = int(height * aspect_ratio)
-                # Adjust to fit the data
-                if height * width * 3 > total_bytes:
-                    width = total_bytes // (height * 3)
-                ecb_img_array = ecb_array[:height*width*3].reshape((height, width, 3))
-            else:
-                # Grayscale image
-                pixels = total_bytes
-                aspect_ratio = original_shape[1] / original_shape[0]
-                height = int(np.sqrt(pixels / aspect_ratio))
-                width = int(height * aspect_ratio)
-                if height * width > total_bytes:
-                    width = total_bytes // height
-                ecb_img_array = ecb_array[:height*width].reshape((height, width))
-            show_img(ecb_img_array, f"ECB Encrypted: {ecb_filename}")
-        
-        # Display CBC encrypted image (read as raw bytes)
-        cbc_filename = f"{bmp_file.split('.')[0]}_cbc_encrypted.bmp"
-        if os.path.exists(cbc_filename):
-            with open(cbc_filename, 'rb') as f:
-                cbc_data = f.read()
-            # Convert to numpy array and reshape to approximate image dimensions
-            cbc_array = np.frombuffer(cbc_data, dtype=np.uint8)
-            # Calculate dimensions based on file size, maintaining aspect ratio
-            total_bytes = len(cbc_array)
-            if len(original_shape) == 3:
-                # RGB image
-                pixels = total_bytes // 3
-                aspect_ratio = original_shape[1] / original_shape[0]
-                height = int(np.sqrt(pixels / aspect_ratio))
-                width = int(height * aspect_ratio)
-                # Adjust to fit the data
-                if height * width * 3 > total_bytes:
-                    width = total_bytes // (height * 3)
-                cbc_img_array = cbc_array[:height*width*3].reshape((height, width, 3))
-            else:
-                # Grayscale image
-                pixels = total_bytes
-                aspect_ratio = original_shape[1] / original_shape[0]
-                height = int(np.sqrt(pixels / aspect_ratio))
-                width = int(height * aspect_ratio)
-                if height * width > total_bytes:
-                    width = total_bytes // height
-                cbc_img_array = cbc_array[:height*width].reshape((height, width))
-            show_img(cbc_img_array, f"CBC Encrypted: {cbc_filename}")
+        # Display ECB and CBC encrypted images
+        base_name = bmp_file.split('.')[0]
+        display_encrypted_image(f"{base_name}_ecb_encrypted.bmp", original_shape, "ECB Encrypted")
+        display_encrypted_image(f"{base_name}_cbc_encrypted.bmp", original_shape, "CBC Encrypted")
     else:
         print(f"Warning: {bmp_file} not found, cannot display images.")
     
