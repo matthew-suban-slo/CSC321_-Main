@@ -135,6 +135,8 @@ class CBCServerOracle:
             return False
         pt_str = pt.decode('utf-8', errors='replace')
         # Check for the admin pattern
+        print('----------------------------')
+        print(f'Decrypted plaintext: {pt_str}')
         return ";admin=true;" in pt_str
 
 
