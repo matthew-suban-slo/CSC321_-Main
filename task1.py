@@ -193,7 +193,7 @@ if __name__ == "__main__":
     print("Encryption complete!")
     
     # Display the original image and encrypted variants in separate windows
-    bmp_file = 'mustang.bmp'
+    bmp_file = 'cp-logo.bmp'
     if os.path.exists(bmp_file):
         # Display original image
         img = Image.open(bmp_file)
