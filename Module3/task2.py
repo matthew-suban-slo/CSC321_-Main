@@ -16,9 +16,14 @@ bob_y = pow(a, bob_rand, q)
 
 #---------------------------Mallory intercepts, sending q instead of alice_y and bob_y
 
+print('Mallory intercepted, sending q instead of Ya and Yb')
 
 alice_s = pow(q, alice_rand, q)     #computing s for both parties
 bob_s = pow(q, bob_rand, q)
+
+print('Alice computes shared key s: ', alice_s)
+print('Bob computes his shared key s: ', bob_s)
+print('The key is 0 because q^n mod q = 0 for all n!\n')
 
 alice_SHA = Crypto.Hash.SHA256.new()        #public key computation
 alice_SHA.update(str(alice_s).encode()) 
@@ -26,17 +31,27 @@ alice_SHA.update(str(alice_s).encode())
 bob_SHA = Crypto.Hash.SHA256.new()
 bob_SHA.update(str(bob_s).encode())         #public key computation
 
-print('Alice SHA:   ',alice_SHA.hexdigest())
-print('BOB SHA:     ', bob_SHA.hexdigest())          #view that the two are identical
+mallory_SHA = Crypto.Hash.SHA256.new()
+mallory_SHA.update('0'.encode())
 
+print('Alice SHA:   ',alice_SHA.hexdigest())
+print('Bob SHA:     ',bob_SHA.hexdigest())          #view that the two are identical
+print('Mallory SHA: ',mallory_SHA.hexdigest())
+
+print('Mallory, knowing that the shared key is 0, can compute the same SHA\n')
 alice_key = bytes(alice_SHA.hexdigest()[:16].encode())
 bob_key = bytes(bob_SHA.hexdigest()[:16].encode())      #shortened key for AES
+mallory_key = bytes(mallory_SHA.hexdigest()[:16].encode())
 
+
+print('Now Alice is going to send a message to Bob')
 msg = bytes('Hello, this is an encrypted message from Alice'.encode())
 print('original message:', msg)
 
 alice_cipher = AES.new(alice_key, AES.MODE_ECB)
 bob_cipher = AES.new(bob_key, AES.MODE_ECB)     #both parties create ciphers to use on their own
+mallory_cipher = AES.new(mallory_key, AES.MODE_ECB)
+
 
 pad_len = 16 - (len(msg) % 16)
 msg_padded = msg + bytes([pad_len] * pad_len)   #PCKS#7 padding
@@ -44,5 +59,8 @@ msg_padded = msg + bytes([pad_len] * pad_len)   #PCKS#7 padding
 secret = alice_cipher.encrypt(msg_padded)
 print('encrypted message (with Alice\'s cipher):    ',secret)
 
-print('decrypted message(with Bob\'s cipher):       ', bob_cipher.decrypt(secret))
+print('decrypted message (with Mallory\'s cipher): ', mallory_cipher.decrypt(secret))
+#print('decrypted message(with Bob\'s cipher):       ', bob_cipher.decrypt(secret))
+
 hexdigest=alice_SHA.hexdigest()
+print('\nMallory can successfully breach Alice and Bob\'s confidentiality')
