@@ -13,10 +13,12 @@ bob_rand = random.randrange(1, q)
 alice_y = pow(a, alice_rand, q)     #each party computes their public key
 bob_y = pow(a, bob_rand, q)
 
-#Alice "sends" Bob  alice_y, and Bob sends bob_y
 
-alice_s = pow(bob_y, alice_rand, q)     #computing s for both parties
-bob_s = pow(alice_y, bob_rand, q)
+#---------------------------Mallory intercepts, sending q instead of alice_y and bob_y
+
+
+alice_s = pow(q, alice_rand, q)     #computing s for both parties
+bob_s = pow(q, bob_rand, q)
 
 alice_SHA = Crypto.Hash.SHA256.new()        #public key computation
 alice_SHA.update(str(alice_s).encode()) 
@@ -26,7 +28,6 @@ bob_SHA.update(str(bob_s).encode())         #public key computation
 
 print('Alice SHA:   ',alice_SHA.hexdigest())
 print('BOB SHA:     ', bob_SHA.hexdigest())          #view that the two are identical
-
 
 alice_key = bytes(alice_SHA.hexdigest()[:16].encode())
 bob_key = bytes(bob_SHA.hexdigest()[:16].encode())      #shortened key for AES
