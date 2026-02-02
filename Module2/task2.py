@@ -135,6 +135,7 @@ class CBCServerOracle:
             return False
         pt_str = pt.decode('utf-8', errors='replace')
         # Check for the admin pattern
+        print(pt_str)
         return ";admin=true;" in pt_str
 
 
@@ -155,7 +156,7 @@ def cbc_bitflip_exploit(server: CBCServerOracle) -> tuple[bytes, bool]:
     Returns: (forged_iv_and_ciphertext, success)
     """
     prefix = "userid=456;userdata="
-    target = ";admin=true;"  # what we want to appear in the decrypted plaintext
+    target = ";admin=false;"  # what we want to appear in the decrypted plaintext
 
     prefix_len = len(prefix)
     pad_len = (-prefix_len) % BLOCK_SIZE  # bytes needed so next byte starts new block
@@ -262,6 +263,7 @@ if __name__ == "__main__":
             #   2. Using placeholder characters that won't be sanitized
             #   3. Modifying the previous ciphertext block to flip bits
             #   4. This caused the placeholder to become ';admin=true;' after decryption
+            # print(aes_manual_cbc_decrypt(forged, ))
         else:
             print("  - check alignment and block boundaries")
     except Exception as e:

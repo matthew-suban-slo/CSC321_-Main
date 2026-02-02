@@ -12,7 +12,7 @@ print("Task 3 Part 2: MITM key fixing via (textbook RSA) malleability/substituti
 # - Bob: chooses random s in Z*_n, encrypts with Alice's public key and sends c
 # - Mallory: intercepts and substitutes ciphertext so Alice's recovered s is known to Mallory
 
-n, e, d, p, q, phi = rsa_keygen(prime_bits=1024, e=65537)
+n, e, d, p, q, phi = rsa_keygen(prime_bits=128, e=65537)
 print("Alice's RSA parameters:")
 print("n (bits):", n.bit_length())
 print("e:", e)
@@ -57,7 +57,7 @@ print("- In textbook RSA, an attacker can replace a ciphertext with an encryptio
 print("  causing the receiver to derive the wrong key / wrong plaintext without any detection.")
 
 
-# -------------------- RSA signature malleability demo --------------------
+# signature malleability
 print("\nTask 3 Part 2 (extra): RSA signature malleability")
 print("Signature scheme: Sign(m,d) = m^d mod n  (textbook / insecure)")
 
@@ -80,9 +80,9 @@ v3 = pow(sig3_forged, e, n)
 
 print("m1:", m1_sig)
 print("m2:", m2_sig)
-print("m3 = (m1*m2) mod n:", m3)
+print("m3 = (m1*m2) mod n:", m3) #m3 forged signature
 print("\nVerify signatures by raising to e mod n:")
 print("sig1^e mod n == m1 ?", v1 == m1_sig)
 print("sig2^e mod n == m2 ?", v2 == m2_sig)
 print("forged sig3 = sig1*sig2 mod n")
-print("sig3^e mod n == m3 ?", v3 == m3)
+print("sig3^e mod n == m3 ?", v3 == m3) # should be valid

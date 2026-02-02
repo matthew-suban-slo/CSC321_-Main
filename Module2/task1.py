@@ -161,6 +161,7 @@ def demonstrate_ecb_vs_cbc():
     print("ECB encrypted (hex):")
     print(ecb_encrypted.hex())
     print("Notice: repeated patterns in plaintext create repeated patterns in ciphertext")
+    # repeated pattern in question: cff41bfde8f27ab37f2c82f41e7316
     print()
     
     # CBC encryption
