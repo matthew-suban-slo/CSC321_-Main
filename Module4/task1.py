@@ -67,7 +67,7 @@ def task_1c():
     results.iloc[0] = [0, '', '', '', 0, 0.0]
     i = 0
     for bits in range(8, 50, 2):
-        msg1, msg2, attempts, elapsed = find_collision(bits, 1000000)
+        msg1, msg2, attempts, elapsed = find_collision(bits, 50000000)
         if msg1 and msg2:
             i += 1
             result = pd.DataFrame({'bits':[bits], 'input1':msg1,'input2': msg2, 'hash':trunc_hash(sha(msg1.encode()), bits), 'inputs_tried':attempts, 'time':elapsed})

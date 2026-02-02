@@ -1,0 +1,75 @@
+User: Bilbo
+Workfactor: 08
+Broken Password: welcome
+Guesses: 95918
+Duration: 0:01:30.33
+User: Gandalf
+Workfactor: 08
+Broken Password: wizard
+Guesses: 110100
+Duration: 0:01:44.08
+User: Thorin
+Workfactor: 08
+Broken Password: diamond
+Guesses: 108263
+Duration: 0:01:42.73
+User: Fili
+Workfactor: 09
+Broken Password: desire
+Guesses: 102276
+Duration: 0:03:15.81
+User: Kili
+Workfactor: 09
+Broken Password: ossify
+Guesses: 111938
+Duration: 0:03:35.78
+User: Balin
+Workfactor: 10
+Broken Password: hangout
+Guesses: 57341
+Duration: 0:03:38.34
+User: Dwalin
+Workfactor: 10
+Broken Password: drossy
+Guesses: 9074
+Duration: 0:00:34.69
+User: Oin
+Workfactor: 10
+Broken Password: ispaghul
+Guesses: 16163
+Duration: 0:01:01.55
+User: Gloin
+Workfactor: 11
+Broken Password: oversave
+Guesses: 132314
+Duration: 0:16:33.99
+User: Dori
+Workfactor: 11
+Broken Password: indoxylic
+Guesses: 125058
+Duration: 0:15:34.06
+User: Nori
+Workfactor: 11
+Broken Password: swagsman
+Guesses: 126847
+Duration: 0:15:41.08
+User: Ori
+Workfactor: 12
+Broken Password: airway
+Guesses: 32444
+Duration: 0:07:59.79
+User: Bifur
+Workfactor: 12
+Broken Password: corrosible
+Guesses: 44055
+Duration: 0:10:52.39
+User: Bofur
+Workfactor: 12
+Broken Password: libellate
+Guesses: 71998
+Duration: 0:17:46.56
+User: Durin
+Workfactor: 13
+Broken Password: purrone
+Guesses: 7987
+Duration: 0:03:57.16
